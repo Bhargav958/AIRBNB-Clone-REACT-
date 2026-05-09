@@ -1,6 +1,7 @@
 import ListingCard from './ListingCard'
+import ListingSkeleton from './ListingSkeleton'
 
-function ListingsGrid({ listings, likedListings, onToggleLike, onReserve }) {
+function ListingsGrid({ listings, likedListings, onToggleLike, onReserve, loading = false }) {
   return (
     <section
       className="mx-auto mt-4 mb-18 w-[min(1180px,calc(100%-32px))] max-sm:w-[calc(100%-24px)]"
@@ -19,7 +20,11 @@ function ListingsGrid({ listings, likedListings, onToggleLike, onReserve }) {
       </div>
 
       <div className="grid grid-cols-1 gap-x-5 gap-y-6.5 sm:grid-cols-2 lg:grid-cols-4">
-        {listings.map((listing) => (
+        {loading ? (
+          Array.from({ length: 8 }).map((_, index) => (
+            <ListingSkeleton key={index} />
+          ))
+        ) : listings.map((listing) => (
           <ListingCard
             key={listing.id}
             listing={listing}

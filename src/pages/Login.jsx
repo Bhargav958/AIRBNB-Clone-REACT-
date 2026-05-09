@@ -1,14 +1,10 @@
+import toast from 'react-hot-toast'
 import Navbar from '../components/Navbar'
 
-function Login({ search, setSearch, theme, onToggleTheme }) {
+function Login() {
   return (
     <div className="min-h-screen bg-white text-neutral-900 dark:bg-neutral-950 dark:text-white">
-      <Navbar
-        search={search}
-        onSearchChange={setSearch}
-        theme={theme}
-        onToggleTheme={onToggleTheme}
-      />
+      <Navbar />
 
       <main className="mx-auto grid min-h-[calc(100vh-82px)] w-[min(1180px,calc(100%-32px))] place-items-center py-10">
         <form className="w-[min(440px,100%)] rounded-2xl border border-neutral-200 p-8 shadow-[0_18px_60px_rgba(0,0,0,0.08)] dark:border-neutral-800 dark:bg-neutral-900">
@@ -37,6 +33,7 @@ function Login({ search, setSearch, theme, onToggleTheme }) {
           <button
             className="min-h-12 w-full rounded-xl bg-[#ff385c] font-extrabold text-white"
             type="button"
+            onClick={() => toast.success('Login demo submitted')}
           >
             Continue
           </button>

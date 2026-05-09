@@ -1,5 +1,8 @@
+import { AnimatePresence, motion } from 'framer-motion'
+import { X } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { formatCurrency } from '../utils/formatCurrency'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 const getNightCount = (checkIn, checkOut) => {
   if (!checkIn || !checkOut) {
@@ -23,16 +26,38 @@ function BookingModal({ listing, onClose }) {
   const serviceFee = Math.round(listing?.price * nights * 0.12 || 0)
   const total = listing ? listing.price * nights + serviceFee : 0
 
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    window.addEventListener('keydown', handleEscape)
+
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [onClose])
+
   if (!listing) {
     return null
   }
 
   return (
+    <AnimatePresence>
     <div
       className="fixed inset-0 z-40 grid place-items-center bg-black/45 p-5"
       role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose()
+        }
+      }}
     >
-      <section
+      <motion.section
+        initial={{ opacity: 0, scale: 0.96, y: 18 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 18 }}
+        transition={{ duration: 0.18 }}
         className="relative grid max-h-[92vh] w-[min(820px,100%)] overflow-y-auto rounded-2xl bg-white shadow-[0_22px_80px_rgba(0,0,0,0.28)] md:grid-cols-[0.9fr_1fr] dark:bg-neutral-950"
         role="dialog"
         aria-modal="true"
@@ -43,7 +68,7 @@ function BookingModal({ listing, onClose }) {
           onClick={onClose}
           aria-label="Close booking modal"
         >
-          ×
+          <X className="mx-auto" size={20} />
         </button>
         <img
           className="h-60 w-full object-cover md:h-full md:min-h-95"
@@ -112,7 +137,10 @@ function BookingModal({ listing, onClose }) {
           <button
             type="button"
             className="min-h-12 w-full rounded-xl border-0 bg-[#ff385c] font-extrabold text-white"
-            onClick={() => setConfirmed(true)}
+            onClick={() => {
+              setConfirmed(true)
+              toast.success('Booking request confirmed')
+            }}
           >
             {confirmed ? 'Reservation confirmed' : 'Confirm reservation'}
           </button>
@@ -123,8 +151,9 @@ function BookingModal({ listing, onClose }) {
             </p>
           )}
         </div>
-      </section>
+      </motion.section>
     </div>
+    </AnimatePresence>
   )
 }
 

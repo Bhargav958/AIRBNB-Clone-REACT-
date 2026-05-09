@@ -1,9 +1,17 @@
-import { formatCurrency } from '../utils/formatCurrency'
+import { motion } from 'framer-motion'
+import { Heart, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { formatCurrency } from '../utils/formatCurrency'
 
 function ListingCard({ listing, isLiked, onToggleLike, onReserve }) {
   return (
-    <article className="group min-w-0">
+    <motion.article
+      className="group min-w-0"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.28 }}
+      whileHover={{ y: -4 }}
+    >
       <div className="relative aspect-[1/0.88] overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
         <Link to={`/listing/${listing.id}`} aria-label={`View ${listing.title}`}>
         <img
@@ -20,7 +28,7 @@ function ListingCard({ listing, isLiked, onToggleLike, onReserve }) {
           onClick={() => onToggleLike(listing.id)}
           aria-label="Save listing"
         >
-          ♥
+          <Heart className={isLiked ? 'fill-current' : ''} size={19} />
         </button>
       </div>
 
@@ -32,7 +40,10 @@ function ListingCard({ listing, isLiked, onToggleLike, onReserve }) {
           >
             {listing.location}
           </Link>
-          <span className="flex-none font-bold">★ {listing.rating}</span>
+          <span className="inline-flex flex-none items-center gap-1 font-bold">
+            <Star className="fill-current" size={15} />
+            {listing.rating}
+          </span>
         </div>
         <p className="my-1 truncate text-neutral-500">{listing.title}</p>
         <p className="my-1 truncate text-neutral-500">
@@ -51,7 +62,7 @@ function ListingCard({ listing, isLiked, onToggleLike, onReserve }) {
           </button>
         </div>
       </div>
-    </article>
+    </motion.article>
   )
 }
 
