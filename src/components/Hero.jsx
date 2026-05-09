@@ -1,25 +1,25 @@
 function Hero({ search, onSearchChange }) {
   return (
     <section
-      className="mx-auto mt-7 mb-4 flex min-h-[520px] w-[min(1180px,calc(100%-32px))] items-end overflow-hidden rounded-[28px] bg-cover bg-center max-lg:min-h-0 max-sm:w-[calc(100%-24px)] max-sm:rounded-2xl"
+      className="mx-auto mt-5 mb-4 flex min-h-[520px] w-[min(1180px,calc(100%-32px))] items-end overflow-hidden rounded-[28px] bg-cover bg-center max-lg:min-h-0 max-sm:mt-3 max-sm:w-[calc(100%-24px)] max-sm:rounded-2xl"
       style={{
         backgroundImage:
           'linear-gradient(90deg, rgba(0,0,0,0.76), rgba(0,0,0,0.2)), url("https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1600&q=85")',
       }}
     >
-      <div className="w-[min(720px,100%)] p-6 text-white sm:p-10 lg:p-14">
+      <div className="w-[min(720px,100%)] p-5 text-white sm:p-10 lg:p-14">
         <p className="mb-2.5 text-xs font-extrabold uppercase tracking-normal text-[#ff385c]">
           Find your next stay
         </p>
-        <h1 className="m-0 max-w-160 text-[42px] leading-[0.96] tracking-normal sm:text-6xl lg:text-[76px]">
+        <h1 className="m-0 max-w-160 text-[38px] leading-[1.02] tracking-normal sm:text-6xl lg:text-[76px] lg:leading-[0.96]">
           Book homes with room to breathe.
         </h1>
-        <p className="my-6 max-w-140 text-lg leading-relaxed text-white/85">
+        <p className="my-5 max-w-140 text-base leading-relaxed text-white/85 sm:text-lg">
           Explore beach villas, cabins, city lofts, and quiet retreats across
           India with a polished Airbnb-style experience.
         </p>
 
-        <form className="grid max-w-180 grid-cols-1 gap-px overflow-hidden rounded-2xl bg-white/20 lg:grid-cols-[1.3fr_1fr_1fr]">
+        <form className="grid max-w-180 grid-cols-1 gap-px overflow-hidden rounded-2xl bg-white/20 shadow-xl lg:grid-cols-[1.3fr_1fr_1fr]">
           <label className="grid gap-2 bg-white p-4 text-xs font-extrabold text-neutral-900">
             Location
             <input

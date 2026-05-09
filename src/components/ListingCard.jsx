@@ -3,6 +3,9 @@ import { Heart, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { formatCurrency } from '../utils/formatCurrency'
 
+const fallbackImage =
+  'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=900&q=80'
+
 function ListingCard({ listing, isLiked, onToggleLike, onReserve }) {
   return (
     <motion.article
@@ -18,11 +21,14 @@ function ListingCard({ listing, isLiked, onToggleLike, onReserve }) {
           className="block h-full w-full object-cover transition duration-200 group-hover:scale-[1.04]"
           src={listing.image}
           alt={listing.title}
+          onError={(event) => {
+            event.currentTarget.src = fallbackImage
+          }}
         />
         </Link>
         <button
           type="button"
-          className={`absolute top-3 right-3 h-9.5 w-9.5 rounded-full border-0 bg-white/90 text-xl ${
+          className={`absolute top-3 right-3 grid h-9.5 w-9.5 place-items-center rounded-full border-0 bg-white/90 text-xl shadow-sm hover:scale-105 ${
             isLiked ? 'text-[#ff385c]' : 'text-neutral-900'
           }`}
           onClick={() => onToggleLike(listing.id)}
@@ -54,7 +60,7 @@ function ListingCard({ listing, isLiked, onToggleLike, onReserve }) {
           <strong className="text-base">{formatCurrency(listing.price)}</strong>
           <span className="text-neutral-500">night</span>
           <button
-            className="ml-auto min-h-9 rounded-full border-0 bg-[#ff385c] px-3.5 text-sm font-extrabold text-white"
+            className="ml-auto min-h-9 rounded-full border-0 bg-[#ff385c] px-3.5 text-sm font-extrabold text-white hover:bg-[#e03250] active:scale-[0.98]"
             type="button"
             onClick={() => onReserve(listing)}
           >

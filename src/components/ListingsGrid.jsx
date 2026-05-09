@@ -1,7 +1,13 @@
 import ListingCard from './ListingCard'
 import ListingSkeleton from './ListingSkeleton'
 
-function ListingsGrid({ listings, likedListings, onToggleLike, onReserve, loading = false }) {
+function ListingsGrid({
+  listings,
+  likedListings,
+  onToggleLike,
+  onReserve,
+  loading = false,
+}) {
   return (
     <section
       className="mx-auto mt-4 mb-18 w-[min(1180px,calc(100%-32px))] max-sm:w-[calc(100%-24px)]"
@@ -24,15 +30,24 @@ function ListingsGrid({ listings, likedListings, onToggleLike, onReserve, loadin
           Array.from({ length: 8 }).map((_, index) => (
             <ListingSkeleton key={index} />
           ))
-        ) : listings.map((listing) => (
-          <ListingCard
-            key={listing.id}
-            listing={listing}
-            isLiked={likedListings.includes(listing.id)}
-            onToggleLike={onToggleLike}
-            onReserve={onReserve}
-          />
-        ))}
+        ) : listings.length > 0 ? (
+          listings.map((listing) => (
+            <ListingCard
+              key={listing.id}
+              listing={listing}
+              isLiked={likedListings.includes(listing.id)}
+              onToggleLike={onToggleLike}
+              onReserve={onReserve}
+            />
+          ))
+        ) : (
+          <div className="col-span-full rounded-2xl border border-dashed border-neutral-300 p-10 text-center dark:border-neutral-800">
+            <h3 className="m-0 text-2xl font-extrabold">No stays found</h3>
+            <p className="mx-auto mt-2 max-w-md text-neutral-500 dark:text-neutral-400">
+              Try changing the destination or category filter.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   )

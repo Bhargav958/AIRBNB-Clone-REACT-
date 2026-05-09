@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import { formatCurrency } from '../utils/formatCurrency'
 import { useEffect, useMemo, useState } from 'react'
 
+const today = new Date().toISOString().split('T')[0]
+
 const getNightCount = (checkIn, checkOut) => {
   if (!checkIn || !checkOut) {
     return 1
@@ -25,6 +27,8 @@ function BookingModal({ listing, onClose }) {
   const nights = useMemo(() => getNightCount(checkIn, checkOut), [checkIn, checkOut])
   const serviceFee = Math.round(listing?.price * nights * 0.12 || 0)
   const total = listing ? listing.price * nights + serviceFee : 0
+  const hasInvalidDateRange =
+    checkIn && checkOut && new Date(checkOut) <= new Date(checkIn)
 
   useEffect(() => {
     const handleEscape = (event) => {
@@ -45,7 +49,7 @@ function BookingModal({ listing, onClose }) {
   return (
     <AnimatePresence>
     <div
-      className="fixed inset-0 z-40 grid place-items-center bg-black/45 p-5"
+      className="fixed inset-0 z-40 grid place-items-center bg-black/45 p-3 sm:p-5"
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
@@ -64,7 +68,7 @@ function BookingModal({ listing, onClose }) {
       >
         <button
           type="button"
-          className="absolute top-4 right-4 h-9.5 w-9.5 rounded-full border-0 bg-white text-2xl text-neutral-900"
+          className="absolute top-4 right-4 z-10 h-9.5 w-9.5 rounded-full border-0 bg-white text-2xl text-neutral-900 shadow hover:bg-neutral-100"
           onClick={onClose}
           aria-label="Close booking modal"
         >
@@ -75,7 +79,7 @@ function BookingModal({ listing, onClose }) {
           src={listing.image}
           alt={listing.title}
         />
-        <div className="p-8">
+        <div className="p-5 sm:p-8">
           <p className="mb-2.5 text-xs font-extrabold uppercase tracking-normal text-[#ff385c]">
             {listing.host}
           </p>
@@ -88,6 +92,7 @@ function BookingModal({ listing, onClose }) {
               <input
                 className="bg-transparent text-sm font-normal outline-0"
                 type="date"
+                min={today}
                 value={checkIn}
                 onChange={(event) => setCheckIn(event.target.value)}
               />
@@ -97,6 +102,7 @@ function BookingModal({ listing, onClose }) {
               <input
                 className="bg-transparent text-sm font-normal outline-0"
                 type="date"
+                min={checkIn || today}
                 value={checkOut}
                 onChange={(event) => setCheckOut(event.target.value)}
               />
@@ -109,7 +115,7 @@ function BookingModal({ listing, onClose }) {
                 onChange={(event) => setGuests(Number(event.target.value))}
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((guestCount) => (
-                  <option key={guestCount} value={guestCount}>
+                  <option className="text-neutral-900" key={guestCount} value={guestCount}>
                     {guestCount} {guestCount === 1 ? 'guest' : 'guests'}
                   </option>
                 ))}
@@ -136,13 +142,23 @@ function BookingModal({ listing, onClose }) {
           </div>
           <button
             type="button"
-            className="min-h-12 w-full rounded-xl border-0 bg-[#ff385c] font-extrabold text-white"
+            className="min-h-12 w-full rounded-xl border-0 bg-[#ff385c] font-extrabold text-white hover:bg-[#e03250] disabled:hover:bg-[#ff385c]"
+            disabled={confirmed || hasInvalidDateRange}
             onClick={() => {
+              if (hasInvalidDateRange) {
+                toast.error('Check-out must be after check-in')
+                return
+              }
+
               setConfirmed(true)
               toast.success('Booking request confirmed')
             }}
           >
-            {confirmed ? 'Reservation confirmed' : 'Confirm reservation'}
+            {hasInvalidDateRange
+              ? 'Fix dates to continue'
+              : confirmed
+                ? 'Reservation confirmed'
+                : 'Confirm reservation'}
           </button>
           {confirmed && (
             <p className="mt-4 rounded-xl bg-rose-50 p-3 text-sm font-bold text-[#ff385c] dark:bg-rose-950/40">

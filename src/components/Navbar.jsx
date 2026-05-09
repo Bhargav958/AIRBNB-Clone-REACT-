@@ -1,5 +1,5 @@
 import { Heart, Menu, Moon, Search, Sun, User, X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useApp } from '../hooks/useApp'
 
@@ -8,6 +8,23 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const closeMenu = () => setIsMenuOpen(false)
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? 'hidden' : ''
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        closeMenu()
+      }
+    }
+
+    window.addEventListener('keydown', handleEscape)
+
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleEscape)
+    }
+  }, [isMenuOpen])
 
   return (
     <header className="sticky top-0 z-20 border-b border-neutral-200 bg-white/95 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/95">
@@ -41,7 +58,7 @@ function Navbar() {
             />
           </label>
           <button
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-full border-0 bg-[#ff385c] px-6 font-bold text-white sm:mr-1"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-full border-0 bg-[#ff385c] px-6 font-bold text-white shadow-sm hover:bg-[#e03250] active:scale-[0.98] sm:mr-1"
             type="button"
             aria-label="Search stays"
           >
@@ -77,19 +94,19 @@ function Navbar() {
           </NavLink>
           <button
             type="button"
-            className="min-h-10 rounded-full border border-neutral-300 bg-white px-4 font-bold dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+            className="min-h-10 rounded-full border border-neutral-300 bg-white px-4 font-bold hover:border-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:hover:border-neutral-300"
           >
             Airbnb your home
           </button>
           <button
             type="button"
-            className="h-10 rounded-full border border-neutral-300 bg-white px-4 font-bold dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+            className="grid h-10 w-10 place-items-center rounded-full border border-neutral-300 bg-white font-bold hover:border-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:hover:border-neutral-300"
             onClick={toggleTheme}
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <Link
-            className="inline-flex h-10 items-center gap-2 rounded-full bg-neutral-900 px-4 text-sm font-extrabold text-white dark:bg-white dark:text-neutral-900"
+            className="inline-flex h-10 items-center gap-2 rounded-full bg-neutral-900 px-4 text-sm font-extrabold text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
             to="/login"
           >
             <User size={16} />
@@ -97,7 +114,7 @@ function Navbar() {
           </Link>
           <button
             type="button"
-            className="flex h-10 w-[74px] items-center justify-around rounded-full border border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900"
+            className="flex h-10 w-[74px] items-center justify-around rounded-full border border-neutral-300 bg-white hover:border-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-neutral-300"
             aria-label="Open profile menu"
           >
             <span className="relative block h-0.5 w-4 rounded-full bg-neutral-600 before:absolute before:block before:h-0.5 before:w-4 before:-translate-y-1.5 before:rounded-full before:bg-neutral-600 before:content-[''] after:absolute after:block after:h-0.5 after:w-4 after:translate-y-1.5 after:rounded-full after:bg-neutral-600 after:content-['']"></span>
@@ -110,7 +127,7 @@ function Navbar() {
         <div className="flex justify-end lg:hidden">
           <button
             type="button"
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-neutral-300 px-4 font-bold dark:border-neutral-700 dark:text-white"
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-neutral-300 px-4 font-bold hover:border-neutral-900 dark:border-neutral-700 dark:text-white"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open mobile menu"
           >
@@ -121,8 +138,19 @@ function Navbar() {
       </nav>
 
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 lg:hidden" role="presentation">
-          <aside className="ml-auto flex h-full w-[min(360px,86vw)] flex-col gap-4 bg-white p-6 shadow-2xl dark:bg-neutral-950">
+        <div
+          className="fixed inset-0 z-50 bg-black/40 lg:hidden"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeMenu()
+            }
+          }}
+        >
+          <aside
+            className="ml-auto flex h-full w-[min(360px,86vw)] flex-col gap-4 overflow-y-auto bg-white p-6 shadow-2xl dark:bg-neutral-950"
+            aria-label="Mobile navigation"
+          >
             <div className="flex items-center justify-between">
               <span className="text-xl font-extrabold text-[#ff385c]">staybnb</span>
               <button
@@ -135,11 +163,11 @@ function Navbar() {
               </button>
             </div>
 
-            <Link className="rounded-xl p-3 font-bold" to="/" onClick={closeMenu}>
+            <Link className="rounded-xl p-3 font-bold hover:bg-neutral-100 dark:hover:bg-neutral-900" to="/" onClick={closeMenu}>
               Explore homes
             </Link>
             <Link
-              className="inline-flex items-center gap-2 rounded-xl p-3 font-bold"
+              className="inline-flex items-center gap-2 rounded-xl p-3 font-bold hover:bg-neutral-100 dark:hover:bg-neutral-900"
               to="/wishlist"
               onClick={closeMenu}
             >
@@ -147,7 +175,7 @@ function Navbar() {
               Wishlist
             </Link>
             <Link
-              className="inline-flex items-center gap-2 rounded-xl p-3 font-bold"
+              className="inline-flex items-center gap-2 rounded-xl p-3 font-bold hover:bg-neutral-100 dark:hover:bg-neutral-900"
               to="/login"
               onClick={closeMenu}
             >
@@ -156,7 +184,7 @@ function Navbar() {
             </Link>
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-xl p-3 text-left font-bold"
+              className="inline-flex items-center gap-2 rounded-xl p-3 text-left font-bold hover:bg-neutral-100 dark:hover:bg-neutral-900"
               onClick={toggleTheme}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}

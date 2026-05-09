@@ -87,7 +87,7 @@ function ListingDetails() {
 
         <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="m-0 text-4xl font-extrabold leading-tight">
+            <h1 className="m-0 text-3xl font-extrabold leading-tight sm:text-4xl">
               {listing.title}
             </h1>
             <p className="mt-2 inline-flex flex-wrap items-center gap-2 text-neutral-500 dark:text-neutral-400">
@@ -97,7 +97,7 @@ function ListingDetails() {
           </div>
           <button
             type="button"
-            className={`rounded-full border px-5 py-2 font-bold ${
+            className={`inline-flex items-center gap-2 rounded-full border px-5 py-2 font-bold hover:border-[#ff385c] ${
               likedListings.includes(listing.id)
                 ? 'border-[#ff385c] text-[#ff385c]'
                 : 'border-neutral-300 dark:border-neutral-700'
@@ -113,11 +113,11 @@ function ListingDetails() {
         </div>
 
         <section className="grid gap-2 overflow-hidden rounded-[24px] md:grid-cols-[2fr_1fr]">
-          <div className="relative min-h-90 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+          <div className="relative min-h-72 overflow-hidden bg-neutral-100 sm:min-h-90 dark:bg-neutral-900">
             <AnimatePresence mode="wait">
               <motion.img
                 key={galleryImages[activeImageIndex]}
-                className="h-full min-h-90 w-full object-cover"
+                className="h-full min-h-72 w-full object-cover sm:min-h-90"
                 src={galleryImages[activeImageIndex]}
                 alt={listing.title}
                 initial={{ opacity: 0, scale: 1.02 }}
@@ -156,7 +156,7 @@ function ListingDetails() {
               ))}
             </div>
           </div>
-          <div className="grid gap-2">
+          <div className="hidden gap-2 md:grid">
             <img
               className="h-44 w-full object-cover md:h-full"
               src={galleryImages[1] || galleryImages[0]}
@@ -182,7 +182,7 @@ function ListingDetails() {
                   Superhost · {listing.guests} guests · {listing.beds} beds ·
                   Private stay
                 </p>
-                <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-neutral-100 px-4 py-2 text-sm font-bold dark:bg-neutral-900">
+                <p className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-full bg-neutral-100 px-4 py-2 text-sm font-bold dark:bg-neutral-900">
                   <ShieldCheck size={17} />
                   Identity verified · Responds within one hour
                 </p>
@@ -250,7 +250,7 @@ function ListingDetails() {
             </section>
           </div>
 
-          <aside className="sticky top-28 h-fit rounded-2xl border border-neutral-200 p-5 shadow-[0_12px_40px_rgba(0,0,0,0.08)] dark:border-neutral-800 dark:bg-neutral-900">
+          <aside className="h-fit rounded-2xl border border-neutral-200 p-5 shadow-[0_12px_40px_rgba(0,0,0,0.08)] lg:sticky lg:top-28 dark:border-neutral-800 dark:bg-neutral-900">
             <div className="mb-4 flex items-center justify-between">
               <p className="m-0">
                 <strong className="text-xl">{formatCurrency(listing.price)}</strong>{' '}
@@ -263,7 +263,7 @@ function ListingDetails() {
             </div>
             <button
               type="button"
-              className="min-h-12 w-full rounded-xl bg-[#ff385c] font-extrabold text-white"
+              className="min-h-12 w-full rounded-xl bg-[#ff385c] font-extrabold text-white hover:bg-[#e03250] active:scale-[0.99]"
               onClick={() => setSelectedListing(listing)}
             >
               Reserve
